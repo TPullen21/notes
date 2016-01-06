@@ -5,7 +5,6 @@ if (Meteor.isServer) {
   Meteor.publish("notes", function () {
     return Notes.find({
       $or: [
-        { private: {$ne: true} },
         { owner: this.userId }
       ]
     });
@@ -35,19 +34,19 @@ if (Meteor.isClient) {
   });
 
   Template.body.events({
-    "submit .new-note": function (event) {
+    "click .new-note": function (event) {
       // Prevent default browser form submit
       event.preventDefault();
  
       // Get values from form element
-      var title = event.target.title.value;
-      var text = event.target.text.value;
+      var title = "";//event.target.title.value;
+      var text = "";//event.target.text.value;
  
       // Insert a note into the collection
       Meteor.call("addNote", title, text);
  
       // Clear form
-      event.target.text.value = "";
+      //event.target.text.value = "";
     },
     "submit .update-note": function (event) {
       // Prevent default browser form submit
@@ -63,10 +62,14 @@ if (Meteor.isClient) {
     "change .hide-completed input": function (event) {
       Session.set("hideCompleted", event.target.checked);
     },
-    "mouseover .notePreview": function (event) {
+    "click .notePreview": function (event) {
       Session.set("currentNoteText", this.text);
       Session.set("currentNoteTitle", this.title);
       Session.set("currentNoteId", this._id);
+    },
+    "click #delete": function () {
+      console.log("Deleting");
+      Meteor.call("deleteNote", Session.get("currentNoteId"));
     }
   });
  
@@ -77,7 +80,7 @@ if (Meteor.isClient) {
   });
 
   Template.registerHelper('trunc', function(passedString) {
-    var text = passedString.substring(0,50); //same as truncate.
+    var text = passedString.substring(0,50);
     return new Spacebars.SafeString(text)
   });
  
@@ -87,6 +90,7 @@ if (Meteor.isClient) {
       Meteor.call("setChecked", this._id, ! this.checked);
     },
     "click .delete": function () {
+      console.log("Deleting");
       Meteor.call("deleteNote", this._id);
     },
     "click .toggle-private": function () {
@@ -116,6 +120,9 @@ Meteor.methods({
   },
   deleteNote: function (noteId) {
     var note = Notes.findOne(noteId);
+    if (typeof(note) === "undefined" || !note) {
+      throw new Meteor.Error("not-authorized");
+    };
     if (note.private && note.owner !== Meteor.userId()) {
       // If the note is private, make sure only the owner can delete it
       throw new Meteor.Error("not-authorized");

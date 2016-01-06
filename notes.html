@@ -6,25 +6,17 @@
   <div class="container">
     <header>
       <h1>Notes</h1>
- 
-      <label class="hide-completed">
-        <input type="checkbox" checked="{{hideCompleted}}" />
-        Hide Completed Notes
-      </label>
+
+      {{#if currentUser}}
+		<button class="new-note btn btn-primary">+</button>
+      {{/if}}
  
       {{> loginButtons}}
- 
-      {{#if currentUser}}
-        <form class="new-note" id="add">
-          <input type="text" name="title" placeholder="Title" />
-          <input type="text" name="text" placeholder="Type to add new notes" />
-        </form>
-		<button type="submit" form="add" value="Submit">Add</button>
-      {{/if}}
     </header>
 
     <div class="notesBodyContainer">
 
+  		{{#if currentUser}}
     	<div class="col-md-4"> <!-- listOfNotePreviews-->
 		    <ul>
 		      {{#each notes}}
@@ -35,13 +27,21 @@
 
     	<div class="col-md-8"> <!-- fullNote-->
 		    <form id="update" class="update-note">
-		      <textarea name="title" cols="100">{{currentNoteTitle}}</textarea>
+		      <textarea class="form-control" name="title">{{currentNoteTitle}}</textarea>
 		      <br>
-		      <textarea name="text" rows="30" cols="100">{{currentNoteText}}</textarea>
+		      <textarea class="form-control" name="text" rows="30">{{currentNoteText}}</textarea>
+		      <!--textarea name="title" cols="100">{{currentNoteTitle}}</textarea>
+		      <br>
+		      <textarea name="text" rows="30" cols="100">{{currentNoteText}}</textarea-->
 		    </form>
-		     <br>
-			<button type="submit" form="update" value="Submit">Update</button>
+		    <br>
+			<button type="submit" form="update" value="Submit" class="btn btn-primary">Update</button>
+			<button value="Delete" class="btn btn-danger" id="delete">Delete</button>
     	</div>
+    	{{else}}
+    	<h3 class="welcome">Welcome to Notes.</h3>
+    	<h3 class="welcome">This is a free to use cloud based application to store your notes. Feel free to sign up.</h3>
+      	{{/if}}
 
     </div>
   </div>
@@ -50,6 +50,7 @@
 <template name="note">
 
 	<li class="notePreview">
+		<button class="delete">&times;</button>
 		<h3>{{title}}</h3>
 		<small>{{trunc text}}</small>
 	</li>

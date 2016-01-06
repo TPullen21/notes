@@ -49,7 +49,7 @@ form {
   position: relative;
 }
 
-.new-task input {
+.new-note input {
   box-sizing: border-box;
   padding: 10px 0;
   background: transparent;
@@ -59,7 +59,7 @@ form {
   font-size: 1em;
 }
 
-.new-task input:focus{
+.new-note input:focus{
   outline: 0;
 }
 
@@ -81,7 +81,7 @@ ul {
 li {
   position: relative;
   list-style: none;
-  padding: 15px;
+  padding: 5px;
   border-bottom: #eee solid 1px;
 }
 
@@ -102,12 +102,16 @@ li.private {
   border-color: #ddd;
 }
 
-header .hide-completed {
+header button {
   float: right;
 }
 
 .toggle-private {
   margin-left: 5px;
+}
+
+.welcome {
+  text-align: center;
 }
 
 @media (max-width: 600px) {
@@ -120,7 +124,7 @@ header .hide-completed {
     clear: both;
   }
 
-  .new-task input {
+  .new-note input {
     padding-bottom: 5px;
   }
 }
