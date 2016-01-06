@@ -1,0 +1,73 @@
+<head>
+  <title>Notes</title>
+</head>
+ 
+<body>
+  <div class="container">
+    <header>
+      <h1>Notes</h1>
+ 
+      <label class="hide-completed">
+        <input type="checkbox" checked="{{hideCompleted}}" />
+        Hide Completed Notes
+      </label>
+ 
+      {{> loginButtons}}
+ 
+      {{#if currentUser}}
+        <form class="new-note" id="add">
+          <input type="text" name="title" placeholder="Title" />
+          <input type="text" name="text" placeholder="Type to add new notes" />
+        </form>
+		<button type="submit" form="add" value="Submit">Add</button>
+      {{/if}}
+    </header>
+
+    <div class="notesBodyContainer">
+
+    	<div class="col-md-4"> <!-- listOfNotePreviews-->
+		    <ul>
+		      {{#each notes}}
+		        {{> note}}
+		      {{/each}}
+		    </ul>
+    	</div>
+
+    	<div class="col-md-8"> <!-- fullNote-->
+		    <form id="update" class="update-note">
+		      <textarea name="title" cols="100">{{currentNoteTitle}}</textarea>
+		      <br>
+		      <textarea name="text" rows="30" cols="100">{{currentNoteText}}</textarea>
+		    </form>
+		     <br>
+			<button type="submit" form="update" value="Submit">Update</button>
+    	</div>
+
+    </div>
+  </div>
+</body>
+ 
+<template name="note">
+
+	<li class="notePreview">
+		<h3>{{title}}</h3>
+		<small>{{trunc text}}</small>
+	</li>
+	<!--li class="{{#if checked}}checked{{/if}} {{#if private}}private{{/if}}">
+		<button class="delete">&times;</button>
+
+		<input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+
+		{{#if isOwner}}
+		  <button class="toggle-private">
+		    {{#if private}}
+		      Private
+		    {{else}}
+		      Public
+		    {{/if}}
+		  </button>
+		{{/if}}
+
+		<span class="text"><strong>{{username}}</strong> - {{text}}</span>
+	</li-->
+</template>
